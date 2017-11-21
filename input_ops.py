@@ -3,6 +3,7 @@ import tensorflow as tf
 
 from util import log
 
+
 def check_data_id(dataset, data_id):
     if not data_id:
         return
@@ -22,7 +23,7 @@ def check_data_id(dataset, data_id):
 
 def create_input_ops(dataset,
                      batch_size,
-                     num_threads=16,           # for creating batches
+                     num_threads=16,  # for creating batches
                      is_training=False,
                      data_id=None,
                      scope='inputs',
@@ -42,7 +43,7 @@ def create_input_ops(dataset,
     # single operations
     with tf.device("/cpu:0"), tf.name_scope(scope):
         input_ops['id'] = tf.train.string_input_producer(
-           tf.convert_to_tensor(data_id),
+            tf.convert_to_tensor(data_id),
             capacity=128
         ).dequeue(name='input_ids_dequeue')
 
@@ -60,7 +61,7 @@ def create_input_ops(dataset,
             Tout=[tf.string, tf.float32, tf.float32],
             name='func_hp'
         )
-        
+
         input_ops['id'].set_shape([])
         input_ops['image'].set_shape(list(m.shape))
         input_ops['label'].set_shape(list(label.shape))

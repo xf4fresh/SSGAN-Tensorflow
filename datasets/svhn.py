@@ -15,8 +15,8 @@ __PATH__ = './datasets/svhn'
 
 rs = np.random.RandomState(123)
 
-class Dataset(object):
 
+class Dataset(object):
     def __init__(self, ids, name='default',
                  max_examples=None, is_train=True):
         self._ids = list(ids)
@@ -30,16 +30,16 @@ class Dataset(object):
 
         file = os.path.join(__PATH__, filename)
         log.info("Reading %s ...", file)
-        
+
         try:
-            self.data = h5py.File(file, 'r') 
+            self.data = h5py.File(file, 'r')
         except:
             raise IOError('Dataset not found. Please make sure the dataset was downloaded.')
         log.info("Reading Done: %s", file)
 
     def get_data(self, id):
         # preprocessing and data augmentation
-        m = self.data[id]['image'].value/255.
+        m = self.data[id]['image'].value / 255.
         l = self.data[id]['label'].value.astype(np.float32)
 
         # Data augmentation: rotate 0, 90, 180, 270
@@ -64,24 +64,29 @@ class Dataset(object):
             len(self)
         )
 
+
 def get_data_info():
     return np.array([32, 32, 10, 3])
+
 
 def get_conv_info():
     return np.array([64, 128, 256])
 
+
 def get_deconv_info():
     return np.array([[384, 2, 1], [128, 4, 2], [64, 4, 2], [3, 6, 2]])
+
 
 def create_default_splits(is_train=True):
     ids = all_ids()
     n = len(ids)
 
     num_trains = 73257
- 
+
     dataset_train = Dataset(ids[:num_trains], name='train', is_train=False)
-    dataset_test  = Dataset(ids[num_trains:], name='test', is_train=False)
+    dataset_test = Dataset(ids[num_trains:], name='test', is_train=False)
     return dataset_train, dataset_test
+
 
 def all_ids():
     id_filename = 'id.txt'
@@ -91,7 +96,7 @@ def all_ids():
         with open(id_txt, 'r') as fp:
             _ids = [s.strip() for s in fp.readlines() if s]
     except:
-        raise IOError('Dataset not found. Please make sure the dataset was downloaded.')        
+        raise IOError('Dataset not found. Please make sure the dataset was downloaded.')
 
     rs.shuffle(_ids)
     return _ids

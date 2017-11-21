@@ -17,8 +17,8 @@ import numpy as np
 import tensorflow as tf
 import h5py
 
-class EvalManager(object):
 
+class EvalManager(object):
     def __init__(self):
         # collection of batches (not flattened)
         self._ids = []
@@ -26,7 +26,6 @@ class EvalManager(object):
         self._groundtruths = []
 
     def add_batch(self, id, prediction, groundtruth):
-
         # for now, store them all (as a list of minibatch chunks)
         self._ids.append(id)
         self._predictions.append(prediction)
@@ -34,7 +33,7 @@ class EvalManager(object):
 
     def compute_accuracy(self, pred, gt):
         correct_prediction = np.sum(np.argmax(pred[:, :-1], axis=1) == np.argmax(gt, axis=1))
-        return float(correct_prediction)/pred.shape[0]
+        return float(correct_prediction) / pred.shape[0]
 
     def report(self):
         # report L2 loss
@@ -45,7 +44,8 @@ class EvalManager(object):
         for id, pred, gt in zip(self._ids, self._predictions, self._groundtruths):
             score.append(self.compute_accuracy(pred, gt))
         avg = np.average(score)
-        log.infov("Average accuracy : %.4f", avg*100)
+        log.infov("Average accuracy : %.4f", avg * 100)
+
 
 class Evaler(object):
     def __init__(self,
@@ -153,11 +153,12 @@ class Evaler(object):
                 "({sec_per_batch:.3f} sec/batch, {instance_per_sec:.3f} instances/sec) "
                 ).format(split_mode=(is_train and 'train' or 'val'),
                          step=step,
-                         test_accuracy=accuracy*100,
+                         test_accuracy=accuracy * 100,
                          sec_per_batch=step_time,
                          instance_per_sec=self.batch_size / step_time,
                          )
                )
+
 
 def main():
     import argparse
@@ -171,7 +172,7 @@ def main():
     config = parser.parse_args()
 
     if config.dataset == 'MNIST':
-        import  datasets.mnist as dataset
+        import datasets.mnist as dataset
     elif config.dataset == 'SVHN':
         import datasets.svhn as dataset
     elif config.dataset == 'CIFAR10':
@@ -188,6 +189,7 @@ def main():
 
     log.warning("dataset: %s", config.dataset)
     evaler.eval_run()
+
 
 if __name__ == '__main__':
     main()

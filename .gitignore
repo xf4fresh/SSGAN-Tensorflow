@@ -7,3 +7,5 @@ datasets/cifar10
 *.hy
 *.txt
 *.gz
+
+.idea

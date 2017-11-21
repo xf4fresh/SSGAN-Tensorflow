@@ -15,8 +15,8 @@ __PATH__ = './datasets/mnist'
 
 rs = np.random.RandomState(123)
 
-class Dataset(object):
 
+class Dataset(object):
     def __init__(self, ids, name='default',
                  max_examples=None, is_train=True):
         self._ids = list(ids)
@@ -32,14 +32,14 @@ class Dataset(object):
         log.info("Reading %s ...", file)
 
         try:
-            self.data = h5py.File(file, 'r') 
+            self.data = h5py.File(file, 'r')
         except:
             raise IOError('Dataset not found. Please make sure the dataset was downloaded.')
         log.info("Reading Done: %s", file)
 
     def get_data(self, id):
         # preprocessing and data augmentation
-        m = self.data[id]['image'].value/255.
+        m = self.data[id]['image'].value / 255.
         l = self.data[id]['label'].value.astype(np.float32)
         return m, l
 
@@ -56,24 +56,29 @@ class Dataset(object):
             len(self)
         )
 
+
 def get_data_info():
     return np.array([28, 28, 10, 1])
+
 
 def get_conv_info():
     return np.array([32, 64, 128])
 
+
 def get_deconv_info():
     return np.array([[100, 2, 1], [25, 3, 2], [6, 4, 2], [1, 6, 2]])
+
 
 def create_default_splits(is_train=True):
     ids = all_ids()
     n = len(ids)
 
     num_trains = 60000
- 
+
     dataset_train = Dataset(ids[:num_trains], name='train', is_train=False)
-    dataset_test  = Dataset(ids[num_trains:], name='test', is_train=False)
+    dataset_test = Dataset(ids[num_trains:], name='test', is_train=False)
     return dataset_train, dataset_test
+
 
 def all_ids():
     id_filename = 'id.txt'

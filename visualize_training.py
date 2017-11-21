@@ -4,6 +4,7 @@ import imageio
 import glob, os
 
 import argparse
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--train_dir', type=str, default=None)
 parser.add_argument('--output_file', type=str, default=None)
@@ -20,10 +21,10 @@ II = []
 for file in sorted(glob.glob(os.path.join(args.train_dir, "*.hy")), key=os.path.getmtime):
     print (file)
     f = h5py.File(file, 'r')
-    I = np.zeros((args.n*args.h, args.n*args.w, args.c))
+    I = np.zeros((args.n * args.h, args.n * args.w, args.c))
     for i in range(args.n):
         for j in range(args.n):
-            I[args.h*i:args.h*(i+1), args.w*j:args.w*(j+1), :] = f[f.keys()[0]][i*args.n+j,:,:,:]
+            I[args.h * i:args.h * (i + 1), args.w * j:args.w * (j + 1), :] = f[f.keys()[0]][i * args.n + j, :, :, :]
     II.append(I)
 
 II = np.stack(II)
